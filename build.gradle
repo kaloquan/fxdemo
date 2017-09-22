@@ -1,0 +1,45 @@
+group 'me.kaloquan'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'application'
+
+sourceCompatibility = 1.8
+compileJava.options.encoding = 'utf-8'
+compileTestJava.options.encoding = 'utf-8'
+mainClassName = 'me.kaloquan.fxdemo.Main'
+
+ext {
+
+}
+
+afterEvaluate {
+    jar {
+        manifest {
+            attributes(
+                    'Implementation-Title': project.name,
+                    'Implementation-Version': project.version,
+                    'Main-Class': mainClassName,
+                    'Class-Path': configurations.compile.collect { 'lib/' + it.name }.join(' '),
+            )
+        }
+    }
+}
+
+task pack(type: Copy) {
+    from configurations.compile
+    into 'build/libs/lib'
+}
+
+repositories {
+    mavenLocal()
+    maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+    jcenter()
+    mavenCentral()
+}
+
+dependencies {
+    compile 'com.jfoenix:jfoenix:1.8.0'
+
+    testCompile 'junit:junit:4.12'
+}
